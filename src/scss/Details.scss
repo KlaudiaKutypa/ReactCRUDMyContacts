@@ -1,0 +1,27 @@
+.details-container {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.details-info{
+    width: 70%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.address, .other, .button{
+    width: 70%;
+}
+
+h3{
+    text-align: start;
+}
+
+
