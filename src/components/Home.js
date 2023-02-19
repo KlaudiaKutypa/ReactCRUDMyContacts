@@ -1,13 +1,16 @@
 import React from 'react';
 import '../scss/Home.scss';
 import { useState, useEffect } from 'react';
+import {Link, useNavigate} from 'react-router-dom';
 
 const API = "https://63ef9746c59531ccf172eaee.mockapi.io/my_contacts"
 
 
 function Home() {
 
-    const [contact, setContact] = useState([])
+    const [contact, setContact] = useState([]);
+    const [refresh, setRefresh] = useState(Math.random())
+    const navigate = useNavigate();
 
     const handleGet = () => {
         fetch(`${API}`)
@@ -17,8 +20,23 @@ function Home() {
 
     useEffect (() => {
         handleGet();
-    },[])
+    },[refresh])
 
+    const handleDelete = (id) => {
+        fetch(`${API}/${id}`, {
+            method: "DELETE",
+        })
+        .then((response) => response.json())
+        .then((data) => setRefresh(data))
+    }
+
+    const handleEdit = (id) => {
+        navigate("/edit/" + id)
+    }
+
+    const handleDetails = (id) => {
+        navigate("/details/" + id)
+    }
 
   return (
     <div className="home-container">
@@ -26,7 +44,7 @@ function Home() {
         <h1>My Contacts</h1>
       </div>
       <div className="nav-btns">
-        <button>Add Contact</button>
+        <Link to="/add"> <button>Add Contact</button> </Link>
       </div>
       <table>
         <thead>
@@ -41,12 +59,12 @@ function Home() {
             {contact.map((item) => (
             <tr key={item.id}>
                 <td>{item.name}</td>
-                <td>+{Math.random().toFixed(2)*100}  {item.mobile}{Math.ceil(Math.random()* 10000000)}</td>
+                <td>{item.mobile}</td>
                 <td>{item.email}</td>
                 <td>
-                    <button>Details</button>
-                    <button>Edit</button>
-                    <button>Delete</button>
+                    <button onClick={()=> handleDetails(item.id)}>Details</button>
+                    <button onClick={()=> handleEdit(item.id)}>Edit</button>
+                    <button onClick={()=> handleDelete(item.id)}>Delete</button>
                 </td>
             </tr>
             ))}
